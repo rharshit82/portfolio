@@ -1,0 +1,340 @@
+---
+title: 'Substring in Golang : Comprehensive Guide'
+date: '2023-08-06'
+# coverImage: "Substring-in-Golang.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+Golang (also referred to as Go) has quickly become one of the powerful programming language for building robust applications. If you're working with the Go programming language, also known as Golang, you'll often need to handle parts of a string, called substrings. This article breaks down Substring in Golang in a simple way, with examples to help you understand.
+
+## **What are Strings in Go?**
+
+In Go, a string is a sequence of bytes. It's essential to understand this as strings in Go may behave slightly different from those in languages where they are sequences of characters. Here's how you define a string in Go:
+
+```
+var myString string = "Hello, Golang!"
+fmt.Println(myString)
+```
+
+## **What's a Substring in Golang?**
+
+A substring is a contiguous sequence of characters within a string. For instance, in the string "GoLang", "Go" and "Lang" are substrings. In Go, there's no distinct substring type; a substring is also a string.
+
+## **How to Get a Substring in Golang:**
+
+### **Using Slicing**
+
+One of the most direct ways to get a substring in Go is by using slicing. Since strings in Go are like slices of bytes, you can use the slice syntax to extract substrings.
+
+**Syntax:**
+
+```
+substring := original[startIndex:endIndex]
+```
+
+**Example:**
+
+```
+original := "Hello, Golang!"
+substring := original[7:14]
+fmt.Println(substring) // This will show: Golang!
+```
+
+**Note**: In the above example, slicing starts from index 7 and goes up to (but does not include) index 14.
+
+### Using the `strings` Package
+
+The Go standard library provides a `strings` package that comes packed with functions to manipulate strings, making various operations, including extracting substrings, easier.
+
+**Example: Using `strings.Index()` and slicing**
+
+If you want to extract a substring that starts with a particular word:
+
+```
+import "strings"
+
+mainStr := "I love Golang programming."
+startIndex := strings.Index(mainStr, "Golang")
+substring := mainStr[startIndex:startIndex+6]
+fmt.Println(substring) // Outputs: Golang
+```
+
+Time complexity: O(n) Space complexity: O(n)
+
+Common Use-cases and Examples
+
+Let us see examples and use cases of Substring in Golang in detailed manner.
+
+### **1\. Extracting domain from an email address**
+
+```
+
+email := "john.doe@example.com"
+atIndex := strings.Index(email, "@")
+domain := email[atIndex+1:]
+fmt.Println(domain) // Outputs: example.com
+```
+
+### **2\. Fetching the file extension**
+
+```
+fileName := "document.pdf"
+dotIndex := strings.LastIndex(fileName, ".")
+extension := fileName[dotIndex+1:]
+fmt.Println(extension) // Outputs: pdf
+```
+
+### **3\. Checking for Substring Presence**
+
+To determine whether a string contains a specific substring, you can use the `strings.Contains()` function:
+
+```
+text := "Gophers are amazing!"
+substring := "are"
+contains := strings.Contains(text, substring)
+fmt.Println(contains) // Output: true
+```
+
+### **4\. Extracting Parts of a URL**
+
+You can use substring manipulation to extract parts of a URL, such as the domain, path, or query parameters. For example:
+
+```
+url := "https://www.example.com/products?id=12345"
+protocolIndex := strings.Index(url, "://")
+domainStart := protocolIndex + 3
+domainEnd := strings.Index(url[domainStart:], "/") + domainStart
+domain := url[domainStart:domainEnd]
+fmt.Println(domain) // Outputs: www.example.com
+```
+
+## **Important Points to Remember:**
+
+1. In Go, strings are zero-indexed, meaning the first character is at index 0.
+2. The end index in the slicing operation is exclusive, so the character at the end index itself is not included in the substring.
+3. If the start index is omitted, it defaults to 0, and if the end index is omitted, it defaults to the length of the string.
+
+Did you know you cant use [Ternary operators in Golang](https://www.sovascript.com/ternary-operators-in-golang/)?
+
+## **Substring Operations:**
+
+1. **Get Substring After a Character:**
+
+```
+
+package main
+
+import (
+"fmt"
+"strings"
+)
+
+func main() {
+  originalString := "dog:cat"
+
+  // Find the position of ':' using strings.Index
+  pos := strings.Index(originalString, ":")
+
+  // Extract substring after ':' using slicing
+  sub := originalString[pos+1:]
+
+  fmt.Println("Substring after character:", sub) // Output: Substring after character: cat
+}
+```
+
+2. **Get Substring Before a Character:**
+
+```
+package main
+
+import (
+"fmt"
+"strings"
+)
+
+func main() {
+  originalString := "dog:cat"
+
+  // Find the position of ':' using strings.Index
+  pos := strings.Index(originalString, ":")
+
+  // Extract substring before ':' using slicing
+  sub := originalString[:pos]
+
+  fmt.Println("Substring before character:", sub) // Output: Substring before character: dog
+}
+```
+
+3. **Print All Substrings of a Given String:**
+
+```
+package main
+
+import "fmt"
+
+func main() {
+  originalString := "abcd"
+  n := len(originalString)
+
+  // Nested loops to print all substrings
+  for i := 0; i < n; i++ {
+    for len := 1; len <= n-i; len++ {
+      fmt.Println(originalString[i : i+len])
+    }
+  }
+}
+```
+
+4. **Print Sum of All Substrings of a Number:**
+
+```
+package main
+
+import (
+"fmt"
+"strconv"
+)
+
+func main() {
+numString := "1234"
+n := len(numString)
+sum := 0
+
+  for i := 0; i < n; i++ {
+    num, _ := strconv.Atoi(numString[i : i+1])
+    sum += num * (i + 1) * (n - i)
+  }
+
+  fmt.Println("Sum of substrings:", sum) // Output: Sum of substrings: 1670
+}
+```
+
+5. **Print Maximum Value of All Substrings of a Number:**
+
+```
+package main
+
+import (
+"fmt"
+"strconv"
+)
+
+func main() {
+  numString := "823"
+  n := len(numString)
+  max := 0
+
+  for i := 0; i < n; i++ {
+     for len := 1; len <= n-i; len++ { num, _ := strconv.Atoi(numString[i : i+len]) if num > max {
+       max = num
+     }
+   }
+}
+
+fmt.Println("Maximum value substring:", max) // Output: Maximum value substring: 823
+}
+```
+
+6. **Print Minimum Value of All Substrings of a Number:**
+
+```
+package main
+
+import (
+"fmt"
+"strconv"
+)
+
+func main() {
+  numString := "4572"
+  n := len(numString)
+  min := 999999999 // A large initial value
+
+  for i := 0; i < n; i++ {
+    for len := 1; len <= n-i; len++ {
+      num, _ := strconv.Atoi(numString[i : i+len])
+      if num < min {
+        min = num
+       }
+    }
+  }
+
+  fmt.Println("Minimum value substring:", min) // Output: Minimum value substring: 2
+}
+```
+
+## **Enhancing String Manipulation with Substrings in Golang:**
+
+As we continue our exploration of substrings in Go, it's worth delving deeper into the nuances and advanced techniques that can significantly augment your string manipulation skills.
+
+### **1\. Replacing Substrings:**
+
+Go's standard library provides a handy function, `strings.Replace()`, that lets you replace occurrences of a substring within a string. This can be especially useful for sanitizing user input or modifying text content.
+
+```
+text := "Gophers are amazing! Gophers are fun!"
+oldSubstr := "Gophers"
+newSubstr := "Gophies"
+modifiedText := strings.Replace(text, oldSubstr, newSubstr, -1)
+fmt.Println(modifiedText)
+```
+
+### **2\. Unicode Considerations:**
+
+Since strings in Go are sequences of bytes, working with Unicode characters requires attention. Unicode characters may take up multiple bytes, affecting substring indexing and slicing. The `utf8` package can be utilized to handle Unicode characters and their byte lengths correctly.
+
+```
+
+text := "Hello, 世界!"
+substring := text[7:11] // Incorrect due to multi-byte Unicode character
+correctSubstring := []rune(text)[2:4] // Correct, using rune conversion
+fmt.Println(string(correctSubstring)) // Outputs: 世界
+```
+
+### **3\. Performance Considerations:**
+
+While string manipulation is intuitive, excessive slicing or repeated string concatenation can impact performance due to the immutability of strings. In such cases, using the `strings.Builder` type can be more efficient, as it avoids excessive memory allocations and copying.
+
+```
+
+var builder strings.Builder
+for i := 0; i < 1000; i++ {
+  builder.WriteString("Go")
+}
+result := builder.String()
+fmt.Println(len(result)) // Outputs: 2000
+```
+
+### **4\. Substrings and Memory:**
+
+It's important to be mindful of memory consumption when working with large strings and substrings. In some cases, using slices of bytes to reference portions of the original string might prevent the creation of unnecessary copies.
+
+```
+original := "This is a large string..."
+substringReference := original[8:12]
+fmt.Println(substringReference) // Outputs: "a la"
+```
+
+### **5\. Regular Expressions:**
+
+For advanced substring extraction based on complex patterns, Go's `regexp` package provides support for regular expressions. Regular expressions offer powerful tools for pattern matching and substring extraction.
+
+```
+import "regexp"
+
+text := "My phone number is 123-456-7890"
+pattern := `[0-9]{3}-[0-9]{3}-[0-9]{4}`
+re := regexp.MustCompile(pattern)
+matches := re.FindString(text)
+fmt.Println(matches) // Outputs: "123-456-7890"
+```
+
+## Conclusion
+
+Handling substrings in Golang is straightforward and intuitive, especially with the power of slicing and the utility of the strings package. Whether you're parsing user input, processing file names, or working with data, understanding substrings will enhance your Go coding experience. Practice regularly, and you'll find working with strings in Go a breeze!
+
+I hope this detailed guide has given you clarity on managing substrings in Go. To gain further insights into its capabilities, delve deeper by perusing [Golang official documentation](https://go.dev/) or engaging with vibrant Go community.

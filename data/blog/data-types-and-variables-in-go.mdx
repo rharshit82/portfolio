@@ -1,0 +1,193 @@
+---
+title: 'Data Types and Variables in Go'
+date: '2023-09-14'
+# coverImage: "Data-Types-and-Variables-in-Go.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+Hello! If you're looking to learn about how Go (or Golang) works with data types and variables, you're in the right place. Let's get started!
+
+## **Understanding Data Types**
+
+When you're programming, you deal with different kinds of data. Some data are numbers. Some are text. Others might be a simple "yes" or "no" (true or false). Go has ways to handle all these different kinds of data. Let's take a closer look.
+
+## **Basic Data Types**
+
+In Go, there are some basic types of data. We'll look at numbers, text, and the true/false kind.
+
+### **Numeric Types**
+
+Numbers in Go come in different shapes and sizes.
+
+#### **Integers:**
+
+These are whole numbers. They can be positive or negative. In Go, there are different types of integers based on their size. For example:
+
+- - `int`: A general whole number. How big it can be depends on your computer.
+    - `int8`: Holds small numbers between -128 and 127.
+    - `int16`: Can store numbers from -32,768 to 32,767.
+    - `int32`: Even bigger, from -2,147,483,648 to 2,147,483,647.
+    - `int64`: The giant of integers! Can hold super big and super small numbers.
+
+```
+var small int8 = 120
+var big int64 = 9007199254740991
+```
+
+#### **Floating Points:**
+
+These are numbers with decimal points. Go has two main types:
+
+- `float32`: This can hold numbers with some decimal places.
+- `float64`: This can hold numbers with more decimal places.
+
+```
+var shortDecimal float32 = 10.23
+var longDecimal float64 = 10.2384923849
+```
+
+#### **Complex Numbers**:
+
+Numbers with a real and imaginary part.
+
+- `complex64`: Uses `float32` for the real and imaginary parts.
+- `complex128`: Uses `float64` for the real and imaginary parts.
+
+```
+var x complex64 = 3 + 4i
+var y complex128 = 3.00000000000001 + 4.00000000000001i
+```
+
+### **String Type**
+
+Text in Go is called a string. It's a sequence of characters.
+
+1. **String Basics**: Text in Go is put in a string.
+
+   ```
+   var text string = "Hello, Go!"
+   ```
+
+2. **Rune Type**: This is a character in Go. It's a bit different from a string because it's just one character.
+
+   ```
+   var letter rune = 'A'
+   ```
+
+3. **String Operations**:
+   - **Concatenation**: Adding two strings together.
+     ```
+     var greet string = "Hello"
+     var name string = "John"
+     var message string = greet + ", " + name + "!"
+     ```
+   - **Conversion**: Change data from one type to another. For example, a number to a string.
+     ```
+     var number int = 5
+     var textNum string = strconv.Itoa(number)
+     ```
+
+#### **Boolean Type**
+
+This is the simplest data type. It has only two values:
+
+- `true`
+- `false`
+
+It's like a light switch. It's either on (true) or off (false).
+
+```
+var isRaining bool = false
+var isSunny bool = true
+```
+
+## **Variables in Go**
+
+Alright, ready to get to know more about variables in Go? Variables are like boxes in a warehouse. Each box can hold something different. In Go, these boxes (or variables) help keep our data organized. Let's explore this more.
+
+### **Declaring Variables**
+
+Before you use a variable, you have to tell Go about it. This is called declaring a variable.
+
+#### **Using `var`**
+
+The basic way to create a variable is with the `var` keyword.
+
+- Want to make a variable to store a number? Here's how:
+  ```
+  var age int
+  age = 30
+  ```
+- What about a variable for text?
+  ```
+  var name string
+  name = "Sam"
+  ```
+
+It's a two-step dance. First, you tell Go you want a variable (`var name string`). Then, you put something in it (`name = "Sam"`).
+
+#### **Short Declaration (`:=`)**
+
+Go has a cool trick to make variables quickly. Instead of two steps, you can do it in one with `:=`.
+
+- Here's how to use it for a number:
+  ```
+  age := 30
+  ```
+- And for text:
+  ```
+  name := "Sam"
+  ```
+  It's quick and clean. Go looks at the data (like `30` or `"Sam"`) and figures out what kind of box (variable) you need.
+
+## **Zero Values in Go**
+
+In Go, when you make a variable without setting its value, it isn’t left empty. It gets a default value. This default is called a "zero value". It's like when you buy a new phone, and it has default apps even if you didn't install them. Here’s what zero values look like for different data types:
+
+- `int`: The zero value is `0`.
+- `float32`/`float64`: The zero value is `0.0`.
+- `string`: It's an empty string `""`.
+- `bool`: The zero value is `false`.
+
+```
+var number int
+var text string
+var isOK bool
+fmt.Println(number)  // Prints: 0
+fmt.Println(text)    // Prints: (an empty line)
+fmt.Println(isOK)    // Prints: false
+```
+
+#### **Variable Scope**
+
+Every variable in Go has a place where it works—a zone. This is called its scope.
+
+1. **Local Variables:** If you make a variable inside a function, only that function can use it. We call these local because they're like locals in a town. They live and work in one place.
+
+```
+func sayHello() {
+  greeting := "Hello"
+  fmt.Println(greeting)
+}
+```
+
+In the above code, `greeting` is local to `sayHello`.
+
+2. **Global Variables:** If you make a variable outside all functions, any function can use it. It's available everywhere. Think of these as world travelers.
+
+```
+var traveler string = "John"
+func travel() {
+  fmt.Println(traveler)
+}
+```
+
+Here, `traveler` can be used in any function because it's global.
+
+## **Conclusion**
+
+Variables are key players in Go. They hold our data and help our programs make sense. Whether you're declaring them the regular way or taking a shortcut, or thinking about where they work, it's all part of the Go journey. Now, with this knowledge, you're better equipped to handle data in your Go programs. Keep coding and exploring!

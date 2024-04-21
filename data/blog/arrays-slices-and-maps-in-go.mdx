@@ -1,0 +1,207 @@
+---
+title: 'Arrays, Slices, and Maps in Go'
+date: '2023-09-12'
+# coverImage: "Arrays-Slices-and-Maps-in-Go.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+Let's talk about data in Go. Go has some cool ways to handle data. We'll look at three main types: arrays, slices, and maps.
+
+## **Intro to Data Structures in Go**
+
+When coding in Go, it's good to know how to save and use data. Arrays, slices, and maps help with this. Think of them as boxes to hold your data.
+
+## **What are Arrays?**
+
+Arrays are like a row of boxes. Each box is of the same size and holds one thing. So, if you have 5 apples, you can put each in its own box.
+
+### **Defining Arrays**
+
+How do you tell Go you want an array? Here's how:
+
+```
+var myArray [5]int // This means: "I want an array for 5 numbers."
+```
+
+Want to put data in it?
+
+```
+myArray[0] = 10
+myArray[1] = 20
+```
+
+This code sets the first box to hold the number 10 and the second to hold 20.
+
+#### **Benefits of Using Arrays**
+
+1. **Fast Access**: It's quick to get to any box in your row. If you know the box number (like box 3), you can see what's inside fast.
+2. **Easy Count**: Since the row has a fixed size (like 5 boxes), you always know how many boxes you have.
+3. **Safe**: All boxes hold the same kind of thing. If it's a row for numbers, you can't put words in it by mistake.
+
+### **Slices in Go**
+
+After arrays, let's jump into another way to hold data in Go: slices. Think of slices as more flexible versions of arrays.
+
+#### **Difference Between Arrays and Slices**
+
+Arrays and slices seem alike, but they have differences:
+
+1. **Size**: Arrays have a fixed size. You decide this size when you make the array. Slices can change size. You can add or remove items as you like.
+2. **Flexibility**: Slices are more flexible. You can grow or reduce them.
+3. **Under the hood**: Slices use arrays behind the scenes. But, they hide this so you don’t have to worry.
+
+#### **Creating and Manipulating Slices**
+
+Making a slice? Here's how:
+
+```
+var mySlice []int = []int{10, 20, 30}
+```
+
+Or even simpler:
+
+```
+mySlice := []int{10, 20, 30}
+```
+
+You can add items to a slice:
+
+```
+mySlice = append(mySlice, 40)
+```
+
+Now, `mySlice` has four items: 10, 20, 30, and 40.
+
+### **Maps in Go**
+
+Now, let's look at maps. Maps are cool because they hold pairs of things: a key and a value.
+
+#### **Declaring Maps**
+
+To tell Go you want a map:
+
+```
+var myMap map[string]int
+```
+
+This means: "I want a map with words (strings) as keys and numbers (ints) as values."
+
+Starting it with some data:
+
+```
+myMap = map[string]int{
+    "apple":  5,
+    "banana": 8,
+}
+```
+
+Here, "apple" is a key with the value 5, and "banana" has the value 8.
+
+## **Maps vs. Arrays vs. Slices**
+
+How to pick between arrays, slices, and maps?
+
+- **Arrays**: When you know how many items you have, and it won't change.
+- **Slices**: When you want a list that can grow or shrink.
+- **Maps**: When you want to match things up, like words to numbers.
+
+One of the most debated topics among Go developers is the choice between maps, arrays, and slices. Each of these data structures has its pros, cons, and ideal use-cases. Here's a more in-depth comparison to help you pick the best tool for your needs.
+
+### **Memory Usage**
+
+- - **Arrays**: Fixed memory allocation. It’s determined at the time of declaration.
+    - **Slices**: Dynamic memory allocation. It can increase as you add more elements. But remember, they’re built on top of arrays. When they grow, a new array gets created, and elements are copied.
+    - **Maps**: Uses a hash table internally, so memory allocation can vary. Usually, more memory overhead than arrays or slices because of the storage of keys and values.
+
+```
+// Memory footprint
+array := [3]int{1, 2, 3} // Fixed size
+slice := []int{1, 2, 3}  // Can grow or shrink
+mapVar := map[string]int{"one": 1, "two": 2, "three": 3} // Dynamic based on keys and values
+```
+
+### **Performance**
+
+- - **Arrays**: Super fast for read operations since you access by index.
+    - **Slices**: Read is fast, but append operations (if the underlying array needs to be resized) can be slower.
+    - **Maps**: Access times can be quite good due to hashing, but it can vary if there are hash collisions.
+
+### **Flexibility**
+
+- - **Arrays**: Not flexible. You need to know the size beforehand.
+    - **Slices**: Very flexible. Can grow or shrink.
+    - **Maps**: Ultimate flexibility, can add or delete key-value pairs freely.
+
+### **Use Cases**
+
+- - **Arrays**: When size is fixed. Good for things like days in a week, player counts in games, etc.
+    - **Slices**: When you need a list-like structure without a fixed size. Good for things like a list of tasks, players in a dynamic game, etc.
+    - **Maps**: When you have unique keys that need values. Good for caching, counting occurrences, and settings/configurations.
+
+```
+// Use-case example
+sliceTasks := []string{"write", "test", "deploy"}
+mapTasksCount := map[string]int{"write": 10, "test": 5, "deploy": 2}
+```
+
+### **Ordering**
+
+- - **Arrays**: Always maintains the order.
+    - **Slices**: Maintains the order as well.
+    - **Maps**: No order guarantee in Go. If you need an order, you’ll have to sort the keys or use another method.
+
+### **Deleting Items**
+
+- - **Arrays**: Can't delete, but you can set a value to its zero value.
+    - **Slices**: Can delete with a combo of slicing.
+    - **Maps**: Direct delete using the `delete` function.
+
+```
+// Delete example
+delete(mapTasksCount, "test")
+```
+
+## **Practical Applications**
+
+When coding in Go, knowing how and when to use each data structure is key. Picking the right one can make your code run better and be easier to understand.
+
+**When to Use Each Data Structure**
+
+- **Arrays**: Use these when you know the number of items you want to store, and it won't change. It's like buying a shoe rack with a fixed number of slots.
+  ```
+  var scores [5]int
+  ```
+- **Slices**: Pick slices when your list of items might get bigger or smaller. It's like having a magic shoe rack that grows or shrinks as needed.
+  ```
+  names := []string{"John", "Doe"}
+  names = append(names, "Sam")
+  ```
+- **Maps**: These are best when you want to link one item to another, like names to scores. Imagine a coat check system. You give a coat, get a number. When you show the number later, you get your coat back.
+  ```
+  coatCheck := map[int]string{
+      1: "Red Coat",
+      2: "Blue Jacket",
+  }
+  ```
+
+## **Common Pitfalls and Best Practices**
+
+- **Slices**: Remember, slices share the same background data. If you make a new slice from an old one and change the new slice, the old one might also change. Be careful!
+- **Maps**: Before using a map item, check it exists. If you ask for a coat number that doesn't exist, there's no coat to get!
+  ```
+  coat, ok := coatCheck[3]
+  if ok {
+      fmt.Println(coat)
+  } else {
+      fmt.Println("Coat not found!")
+  }
+  ```
+- **General**: Always keep data types in mind. Don't mix them up. Go is strict about this. A number is not a word, and a word is not a list.
+
+## **Conclusion: Mastering Data Structures in Go**
+
+Understanding data structures in Go is like having the right tools in a toolbox. Arrays, slices, and maps each have a special job. By knowing what each tool does, you can build great things. With practice, picking the right one gets easier. So, keep coding and exploring Go!

@@ -1,0 +1,302 @@
+---
+title: 'Templating and Frontend Integration in Go'
+date: '2023-10-10'
+# coverImage: "Templating-and-Frontend-Integration-in-Go.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+You have a golang backend to handle all the backend tasks but you need something to show your it too. You can either use libraries like React, Angular to create a separate frontend and use the golang backend for your business logic. However, if you want a simple application with HTML in frontend and golang in backend, templating is the way to go.
+
+#### **Definition of Templating**
+
+Templating is a way to write HTML with small pieces of Go code inside. This Go code helps to show data dynamically. Imagine you have a website and want to show a user's name on different pages. Instead of writing their name manually on each page, you would use a template. In the template, you'd have a piece of Go code that tells the web server to replace a placeholder with the user's name. When the server sends the page to the user's browser, it replaces the placeholder with the user’s actual name. This way, one template can be used to show personalized data for many users.
+
+## Templating and Frontend Integration in Go
+
+### **html/template Package**
+
+The `html/template` package in Go is made for working with HTML templates. This package helps to keep your website safe by changing special characters like `<`, `>`, `&`, `'` and `"` into safe HTML code. This is important to stop some common web attacks.
+
+Here is an example of how to use the `html/template` package to create a simple HTML page that says "Hello, World!":
+
+```
+package main
+
+import (
+"html/template"
+"os"
+)
+
+func main() {
+// Define a new template
+  tmpl := template.New("test")
+  tmpl, _ = tmpl.Parse("Hello, {{.}}!")
+// Use the template to write to the screen tmpl.Execute(os.Stdout, "World")
+```
+
+In this code:
+
+- We import the `html/template` package.
+- We create a new template called "test".
+- We add some HTML to the template, with `{{.}}` as a placeholder for data.
+- We use the template to write "Hello, World!" to the screen.
+
+### **text/template Package**
+
+The `text/template` package is also for templating, but it's not just for HTML. It's a more general tool that doesn’t change special characters into safe HTML code. This makes `text/template` good for other kinds of text, like configuration files, but not as safe for HTML.
+
+Here’s how you might use `text/template` to create a message in plain text:
+
+```
+package main
+
+import (
+"text/template"
+"os"
+)
+
+func main() {
+  // Define a new template
+  tmpl := template.New("test")
+  tmpl, _ = tmpl.Parse("Hello, {{.}}!")
+
+  // Use the template to write to the screen
+  tmpl.Execute(os.Stdout, "World")
+}
+```
+
+This code is similar to before, but now we're using `text/template` instead of `html/template`.
+
+These two packages are the starting point for working with templates in Go. They provide the tools you need to start making dynamic web pages.
+
+### **Basic Templating Syntax**
+
+#### **Actions**
+
+Actions are the heart of Go templates. They are bits of code surrounded by `{{` and `}}`. Actions tell Go what to do when it sees them in a template. For example, to print something, you'd use an action like `{{.}}`. This action tells Go to print the data it has been given.
+
+```
+package main
+
+import (
+"html/template"
+"os"
+)
+
+func main() {
+  tmpl, _ := template.New("test").Parse("Hello, {{.}}!")
+  tmpl.Execute(os.Stdout, "World")
+}
+```
+
+In this code, `{{.}}` is the action that tells Go to print "World" when it creates the web page.
+
+#### **Variables**
+
+Variables in Go templates help you hold and manage data. You can define a [variable](https://www.sovascript.com/golang-global-variables/) with the `with` action and use it later.
+
+```
+package main
+
+import (
+"html/template"
+"os"
+)
+
+func main() {
+  tmpl, _ := template.New("test").Parse(`
+  {{with $name := "Go"}}
+  Hello, {{$name}}!
+  {{end}}
+  `)
+  tmpl.Execute(os.Stdout, nil)
+}
+```
+
+Here, `$name` is a variable holding the string "Go". The `{{with ...}} {{end}}` block creates the variable and prints "Hello, Go!".
+
+### **Control Structures**
+
+Control structures help you manage how your template behaves. Common control structures are `if`, `else`, and `range`.
+
+```
+package main
+
+import (
+"html/template"
+"os"
+)
+
+func main() {
+  names := []string{"Alice", "Bob", "Charlie"}
+  tmpl, _ := template.New("test").Parse(`
+  {{range .}}
+  Hello, {{.}}!
+  {{end}}
+  `)
+  tmpl.Execute(os.Stdout, names)
+}
+```
+
+Here, `{{range .}} {{end}}` goes through the list of names and says hello to each one.
+
+## **Creating a Simple Template**
+
+### **Define the Template**
+
+First, you need to define your template. This is where you write the HTML and Go code that will become your web page.
+
+```
+tmpl, _ := template.New("test").Parse(`
+<h1>Hello, {{.}}!</h1>
+`)
+```
+
+### **Parse the Template**
+
+Parsing checks your template for mistakes and gets it ready to use. In Go, defining and parsing often happen at the same time, like in the code above.
+
+### **Execute the Template**
+
+Executing the template is where Go follows the actions in your template and creates your web page.
+
+```
+package main
+
+import (
+"html/template"
+"os"
+)
+
+func main() {
+tmpl, _ := template.New("test").Parse(`Hello, {{.}}!`)
+tmpl.Execute(os.Stdout, "World") }
+```
+
+In this code, `tmpl.Execute(os.Stdout, "World")` tells Go to use "World" as the data, follow the actions in the template, and write the result to the screen. The screen will show "Hello, World!".
+
+### **Frontend Integration in Go**
+
+#### **Handling Static Files**
+
+In web development, static files are files that don't change, like images, CSS, and JavaScript files. Go has a built-in way to handle static files using the `http` package. You can use the `http.FileServer` function to [create a simple server](https://www.sovascript.com/building-basic-http-servers-in-go/) for your static files. Here’s how you might do it:
+
+```
+package main
+
+import (
+"net/http"
+)
+
+func main() {
+  fileServer := http.FileServer(http.Dir("static")) // static is the folder name
+  http.Handle("/static/", http.StripPrefix("/static", fileServer))
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+In this code:
+
+- `http.FileServer` creates a new file server.
+- `http.Dir("static")` tells Go to look for static files in a folder called `static`.
+- `http.Handle` and `http.StripPrefix` help Go find the files.
+- `http.ListenAndServe` starts the server on port 8080.
+
+Now, you can put your static files in a folder called `static` and they will be available on your website.
+
+### **Rendering HTML Pages**
+
+Rendering HTML pages in Go can be done using the `html/template` package, as we've seen in the earlier sections. Here's a quick example of how you might render an HTML page:
+
+```
+package main
+
+import (
+"html/template"
+"net/http"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+  tmpl, _ := template.New("test").Parse(`Hello, World!`)
+  tmpl.Execute(w, nil) } func main() { http.HandleFunc("/", handler) http.ListenAndServe(":8080", nil)
+}
+```
+
+In this code:
+
+- We create a new function `handler` to handle web requests.
+- Inside `handler`, we define, parse, and execute a template to create an HTML page.
+- `http.HandleFunc` tells Go to use `handler` when someone visits the website.
+- `http.ListenAndServe` starts the server on port 8080.
+
+### **Working with CSS and JavaScript in Go**
+
+#### **Linking CSS and JavaScript Files**
+
+After handling static files, linking CSS and JavaScript in your HTML is easy. You just need to add a link to your CSS file and a script tag for your JavaScript file in your HTML templates:
+
+```
+<head>
+
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/script.js"></script>
+</head>
+```
+
+Make sure the `href` and `src` paths match where your CSS and JavaScript files are on your server.
+
+#### **Implementing a Basic Style**
+
+To style your HTML pages, you'll write CSS code in a file like `style.css`. Here’s a basic example:
+
+```
+/* File: style.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+h1 {  color: #333; }
+```
+
+Then, you link to your `style.css` file in your HTML templates, as shown above. Now your website will have a simple style: a nice font, no margins or padding, a light grey background, and dark grey text for `h1` headers.
+
+This simple workflow shows how Go helps you integrate frontend technologies like HTML, CSS, and JavaScript to create a more interactive and well-designed web application.
+
+### **Best Practices for Templating and Frontend Integration**
+
+#### **Code Organization**
+
+Organizing your code well is key to making your Go projects easy to understand and maintain. Here are some tips:
+
+1. **Separate Concerns:** Keep your Go, HTML, CSS, and JavaScript code in separate files. This makes your code easier to find and edit.
+2. **Use Directories:** Store related files in the same directory. For example, you might keep all your templates in a `templates` directory and all your static files in a `static` directory.
+3. **Name Files Clearly:** Name your files in a way that tells you what's inside. For example, a file named `homepage.html` is easier to understand than a file named `page1.html`.
+
+```
+// Directory Structure Example
+- project-directory/
+- static/
+- css/
+- style.css
+- js/
+- script.js
+- templates/
+- homepage.html
+- dashboard.html
+- main.go
+```
+
+## **Conclusion**
+
+Templating and frontend development in Go have come a long way. With Go's built-in templating engine, developers can create dynamic and interactive web applications. The support for frontend development is continually growing with libraries like Gorilla Toolkit and frameworks like Go Buffalo.
+
+The future looks bright with evolving technologies like WebAssembly and active community contributions. These factors make Go an exciting choice for modern web development. As the ecosystem grows, we can expect to see more tools and improved practices, making Go an even better choice for building robust and user-friendly web applications.
+
+With the right set of tools and an active community, Go will continue to be a reliable choice for templating and frontend development. Whether you are building a simple website or a complex web application, Go provides the tools and the support needed to create a great user experience.

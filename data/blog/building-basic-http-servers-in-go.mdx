@@ -1,0 +1,290 @@
+---
+title: 'Building Basic HTTP Servers in Go'
+date: '2023-09-18'
+# coverImage: "Building-Basic-HTTP-Servers-in-Go.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+The web world is big, and servers keep it running. Go, often called "Golang", is a strong choice when setting up these servers. Let's get started and see why Go is great and how HTTP servers work.
+
+## **Why Go for Web Servers?**
+
+1. **Speed**: Go is fast. Very fast. When you use Go, your server responds quickly.
+2. **Simple to Learn**: Go is not messy. The code is clean. This means less headache and more fun!
+3. **Safe**: Go has built-in ways to stop errors. This means fewer crashes and more uptime.
+4. **Built for the Web**: Go was made with the web in mind. This means it has tools and libraries just for building web servers.
+
+_Code Snippet: Basic Go Server_
+
+```
+package main
+import ( "fmt" "net/http" )
+func main() {
+  http.HandleFunc("/", HelloServer)
+  http.ListenAndServe(":8080", nil) }
+  func HelloServer(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Hello, Go!")
+  }
+}
+```
+
+When you run this, you create a server. Visit `localhost:8080` in your browser. You'll see "Hello, Go!".
+
+## **Basics of HTTP**
+
+HTTP stands for "HyperText Transfer Protocol". Think of it as the language of the web. When you visit a website, you send an HTTP request. The server reads it, then sends back an HTTP response.
+
+Here are some key parts:
+
+1. **Methods**: These are actions. Like `GET` (grab a page) or `POST` (send data to a server).
+2. **Status Codes**: Servers send these to say how things went. Like `200` (all good) or `404` (page not found).
+3. **Headers**: Extra info about the request or response. Tells the server or browser what's coming.
+4. **Body**: The main content. This could be the HTML of a page, or data you send to a server.
+
+_Code Snippet: HTTP GET Request in Go_
+
+```
+package main
+import ( "io/ioutil" "log" "net/http" )
+func main() {
+  response, err := http.Get("http://example.com/")
+  if err != nil {
+    log.Fatal(err)
+  }
+  defer response.Body.Close()
+  body, err := ioutil.ReadAll(response.Body)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Println(string(body))
+}
+```
+
+Run this, and you'll get the content of `example.com`.
+
+## **Setting up Your Go Environment**
+
+### **Installing Go**
+
+[Checkout our detailed guide on Go Installation steps in your coding environment](https://www.sovascript.com/go-installation-steps-for-windows-mac-linux/)
+
+### **First Go Program**
+
+Ready to say hello to Go? Let’s write a small program:
+
+_Code Snippet: Hello Go Program_
+
+```
+package main
+import "fmt"
+func main() {
+fmt.Println("Hello from Go!") }
+```
+
+Save this as `hello.go`. In your terminal or command line, navigate to the folder where you saved the file and run:
+
+`go run hello.go`
+
+You should see: "Hello from Go!" Nice, you just ran your first Go program!
+
+## **Creating Your First HTTP Server**
+
+### **Simple HTTP Handler**
+
+Now, let’s set up a basic server. The handler is like a doorman. It decides what to show when someone visits.
+
+_Code Snippet: Basic HTTP Handler in Go_
+
+```
+package main
+import ( "fmt" "net/http" )
+func HelloServer(w http.ResponseWriter, r *http.Request) {
+  fmt.Fprintf(w, "Hello, HTTP!")
+}
+```
+
+### **Starting the Server**
+
+The handler is ready. Now, we light up the server. We tell it to listen on a specific door, say door 8080.
+
+_Code Snippet: Start the Go HTTP Server_
+
+```
+package main
+import ( "fmt" "net/http" )
+func HelloServer(w http.ResponseWriter, r *http.Request) {
+  fmt.Fprintf(w, "Hello, HTTP!")
+}
+
+func main() {
+  http.HandleFunc("/", HelloServer)
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+Run this program. Open a web browser. Type `localhost:8080`. You should see: "Hello, HTTP!" Your server is alive!
+
+### **Handling Multiple Routes**
+
+Every website has different pages, right? In server language, these pages are called "routes". With Go, handling different routes is easy. Here's how:
+
+_Code Snippet: Multiple Routes in Go_
+
+```
+package main
+import ( "fmt" "net/http" )
+func HomePage(w http.ResponseWriter, r *http.Request) {
+  fmt.Fprintf(w, "Welcome to the Home Page!")
+}
+func AboutPage(w http.ResponseWriter, r *http.Request) {
+  fmt.Fprintf(w, "This is the About Page!")
+}
+func main() {
+  http.HandleFunc("/", HomePage)
+  http.HandleFunc("/about", AboutPage)
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+With this, visiting `localhost:8080` shows the home page. `localhost:8080/about` takes you to the about page.
+
+### **Serving Static Files**
+
+Sometimes, you want to show images, styles, or scripts. These are called "static files". Here's a simple way to serve them using Go:
+
+_Code Snippet: Serving Static Files in Go_
+
+```
+package main
+import ( "net/http" )
+func main() {
+  fs := http.FileServer(http.Dir("static/"))
+  http.Handle("/static/", http.StripPrefix("/static/", fs))
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+Place your static files (like images, CSS, or JavaScript) in a folder named "static". Now, `localhost:8080/static/filename.ext` will show the file.
+
+## **Tips for Effective Go Web Servers**
+
+### **Efficient Error Handling**
+
+Errors can happen. It's a part of life. But a good server knows how to handle them without causing a fuss. Go has tools to help with this:
+
+_Code Snippet: Error Handling in Go_
+
+```
+package main
+import ( "fmt" "net/http" )
+func HomePage(w http.ResponseWriter, r *http.Request) {
+  _, err := fmt.Fprintf(w, "Welcome to the Home Page!")
+  if err != nil {
+    http.Error(w, "Oops! Something went wrong.", http.StatusInternalServerError)
+  }
+}
+func main() {
+  http.HandleFunc("/", HomePage)
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+If there’s an error showing the home page, the user sees a friendly error message.
+
+**Middleware & Its Magic**
+
+Middleware is like a helper for your server. It does tasks before or after handling a request. It can do things like checking if a user is logged in or recording how long a task takes.
+
+_Code Snippet: Basic Middleware in Go_
+
+```
+package main
+import ( "fmt" "net/http" )
+func LoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request) {
+    fmt.Println("Request received") next(w, r) fmt.Println("Request handled")
+  }
+}
+func HomePage(w http.ResponseWriter, r *http.Request) {
+  fmt.Fprintf(w, "Welcome to the Home Page!")
+}
+func main() {
+  http.HandleFunc("/", LoggingMiddleware(HomePage))
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+With this, every time someone visits the home page, the server logs "Request received" and "Request handled".
+
+**Why Use Middleware?**
+
+1. **Control**: Middleware lets you manage requests and responses.
+2. **Flexibility**: Add or remove tasks without changing core server code.
+3. **Reuse**: Use the same middleware in different projects.
+4. **Organize**: Keep your server code clean and easy to read.
+
+**Conclusion: The Power of Go Web Servers**
+
+When we talk about web servers, there's a language that stands tall, and that's Go. So, what makes Go's web servers special? Let's wrap up our journey with some final thoughts.
+
+**1\. Speed is Key**
+
+One big reason folks love Go? It's quick! Go is designed for speed. Web servers built with Go respond at lightning pace, ensuring users don't wait long for pages to load.
+
+_Code Snippet: Simple Go Server Response Time Check_
+
+```
+package main
+import ( "fmt" "net/http" "time" )
+func TimeCheckHandler(w http.ResponseWriter, r *http.Request) {
+  start := time.Now()
+  fmt.Fprintf(w, "Testing server speed!")
+  duration := time.Since(start)
+  fmt.Printf("Handled request in %s\n", duration)
+}
+func main() {
+  http.HandleFunc("/timecheck", TimeCheckHandler)
+  http.ListenAndServe(":8080", nil)
+}
+```
+
+Run this, visit `localhost:8080/timecheck`, and see how fast Go handles the request!
+
+**2\. Simple, Yet Powerful**
+
+Go keeps things clean. Even if you're new to it, you'll find writing server code is a breeze. And, for those who know their way around, Go offers powerful tools to make advanced servers.
+
+**3\. Safety First**
+
+Errors happen. But Go's built-in error handling ensures your web server runs smoothly, even when things go sideways.
+
+**4\. Expand and Grow**
+
+Remember our chat about middleware? It’s tools like these that let Go servers grow. As your website gets bigger, Go is ready to scale with it.
+
+**5\. Active Community**
+
+Behind Go is a bustling group of developers. They share new tools, answer questions, and make Go better every day. So, if you ever hit a snag, a solution is likely just a forum post away.
+
+_Code Snippet: Go Web Server with Community Middleware Example_
+
+```
+// Using a popular community middleware: Gorilla Mux
+// First, install it: go get -u github.com/gorilla/muxpackage main
+import ( "fmt" "net/http" "github.com/gorilla/mux" )
+func main() {
+  r := mux.NewRouter()
+  r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Hello, Go with Gorilla Mux!")
+  })
+  http.Handle("/", r) http.ListenAndServe(":8080", nil)
+}
+```
+
+This code shows how easily Go integrates with community-made tools.
+
+All in all, Go offers a mix of speed, simplicity, and power, making it a top choice for web servers. Whether you're starting a new project or looking to switch, Go's web server capabilities promise a smooth sail. So, ready to give Go a go?

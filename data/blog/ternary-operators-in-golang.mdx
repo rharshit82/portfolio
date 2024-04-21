@@ -1,0 +1,153 @@
+---
+title: 'All about Ternary Operators in Go (Golang)'
+date: '2023-08-05'
+# coverImage: 'Ternary-in-Golang.png'
+---
+
+Programmers use ternary operators as an efficient way of making quick decisions in code quickly and concisely. If you work with Go (Golang), you might have noticed that, unlike some other programming languages, it doesn't have built-in support for ternary operators. This article examines all about Ternary Operators in Go,  how we can replicate their functionality within Go and provide alternative approaches that effectively replace ternary operators.
+
+## What are Ternary Operators?
+
+Ternary operators are concise conditional constructs in many programming languages, enabling developers to evaluate a condition and choose between two values or expressions in a single line of code. Examples of ternary operators can be found in languages like C++, Python and JavaScript, where their syntax typically looks something like this:
+
+```
+condition ? true_value : false_value.
+```
+
+However, it should be noted that **Go (Golang) lacks native support for ternary operators** and recommends alternative approaches like using if-else statements, inline functions or maps to accomplish similar conditional behaviour.
+
+## **Why No Ternary Operators in Go?**
+
+Go was created with simplicity and readability, with its creators leaving out certain features intentionally to keep it clean and easy to learn. One such omission was the ternary operator, which can make code more complicated for newcomers to comprehend; Go encourages clear and explicit code, so this goal may often be more effectively met through alternative solutions than ternary operators.
+
+## **Using if-else Statements**
+
+While Go doesn't provide a built-in ternary operator, you can still easily replicate its functionality using an if-else statement. Here is an example that illustrates this technique for creating ternary-like behaviour:
+
+```
+package main
+
+import "fmt"
+
+
+func main() {
+  condition := true
+  result := ""
+
+if condition {
+  result = "True value"
+} else {
+  result = "False value"
+}
+
+  fmt.Println(result)
+}
+```
+
+**Using Inline Functions**
+
+One elegant method of simulating ternary operators in Go is through inline functions. Simply define a function that takes in three values (condition and two values), evaluates them together and returns one value based on that condition - here's an example:
+
+```
+package main
+import "fmt"
+
+func ternary(condition bool, trueValue, falseValue string) string {
+if condition {
+  return trueValue
+}
+  return falseValue
+}
+
+func main() {
+  result := ternary(true, "True value", "False value")
+  fmt.Println(result)
+}
+```
+
+### **Using Maps**
+
+To simulate ternary operators in Go, using maps is another effective technique. Create a map where keys represent conditions while values correspond to outcomes as an example:
+
+```
+package main
+import "fmt"
+
+func main() {
+  conditions := map[bool]string{
+  true: "True value",
+  false: "False value",
+  }
+
+  result := conditions[true]
+  fmt.Println(result)
+}
+```
+
+## **Benefits of Alternative Approaches**
+
+1. **Readability**: Although ternary operators can lead to compact code, their use may reduce readability. Go's alternatives provide self-explanatory code.
+2. **Consistency**: Go's consistent coding style encourages teams to use conditional statements such as if-else statements, inline functions or maps for conditional operations, making team collaboration more straightforward.
+3. **Error Prevention**: Longer, more explicit alternatives may help avoid common coding mistakes and increase overall codebase quality.
+
+## **Real-World Use Cases**
+
+To solidify your understanding, consider real-world scenarios where ternary operators are prevalent and explore how Go can fulfil similar objectives more effectively.
+
+### **Scenario 1: Assigning Values Based on Conditions**
+
+Ternary operators can be useful when assigning values based on certain conditions, as shown by this C++ snippet:
+
+```
+int result = (x > y) ? x : y;
+```
+
+In the absence of ternary operators in Go, the same outcome can be achieved using an if-else statement or an inline function:
+
+```
+// Using if-else statement
+if x > y {
+   result = x
+}
+else {
+   result = y
+}
+// Using inline function
+result := ternary(x > y, x, y) // we defined this above
+```
+
+**Scenario 2: Setting Default Values**
+
+Ternary operators are handy when setting default values based on a condition. In JavaScript, for instance:
+
+```
+const greeting = isMorning ? "Good morning!" : "Hello!";
+```
+
+To replicate this behavior in Go, you can utilize an inline function:
+
+```
+greeting := ternary(isMorning, "Good morning!", "Hello!") // we defined this ternary above
+```
+
+**Scenario 3: Handling Optional Parameters**
+
+Ternary operators facilitate handling optional parameters, as seen in Python:
+
+```
+threshold = user_threshold if user_threshold else default_threshold
+```
+
+In Go, you can attain the same outcome with an if-else statement:
+
+```
+if userThreshold != "" {
+    threshold = userThreshold
+} else {
+    threshold = defaultThreshold
+}
+```
+
+## **Conclusion**
+
+Although Go may not include a traditional ternary operator, plenty of options promote readable and maintainable code. You can achieve similar results using if-else statements, inline functions, or maps creatively to stay true to Go's philosophy of clarity and simplicity while remaining compliant with its code standards. Always pay attention to context and readability when deciding conditional operations in Go.

@@ -1,0 +1,199 @@
+---
+title: 'Golang Global Variables: Complete Guide'
+date: '2023-10-04'
+# coverImage: "Golang-Global-Variables-Complete-Guide.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+When coding in Go, or Golang, understanding the ins and outs of variable scope helps a lot. Let's talk about global variables in this language.
+
+## **What Are Global Variables?**
+
+**Definition:** Global variables are variables that are available throughout your whole program. They're not inside any function or method. Instead, they're out in the open, free for any [function](https://www.sovascript.com/functions-in-golang/) to use.
+
+**Importance in Programming:** Think of global variables like a public park. Anyone can go in, play around, or just relax. Similarly, in a program, any function can access and change a global variable. This makes sharing data between different parts easy.
+
+### **Declaring Global Variables in Golang**
+
+When starting with Golang, one might ask, "How do I create these so-called global variables?" Let's break it down.
+
+**Basic Declaration:** Here's the deal: If you declare a variable outside all functions, it's global. Here's an example:
+
+```
+package main
+import "fmt"
+
+// This is a global variable
+var myGlobalVar = "I am global!"
+func main() {
+    fmt.Println(myGlobalVar)  // Outputs: I am global!
+}
+```
+
+In the above code, `myGlobalVar` is available for any function in the program.
+
+**Using the `var` Keyword:** The `var` keyword in Golang helps in explicitly declaring variables. It's like putting a label on something. For global variables, it's used outside functions. Here's how:
+
+```
+package main
+import "fmt"
+
+// Declaring using the 'var' keyword
+var anotherGlobalVar string = "Hello again, from global space!"
+
+func main() {
+    fmt.Println(anotherGlobalVar)  // Outputs: Hello again, from global space!
+}
+```
+
+## **Benefits of Golang Global Variables**
+
+Using global variables in your Golang program can be like having a community toolbox. Everyone knows where it is and can use it. But what makes them so handy?
+
+### **Code Reusability:**
+
+Ever written a piece of code and thought, "I'll need this again!"? Global variables can help. Instead of rewriting or copying the same variable in different functions, just declare it once globally. Every function can access it without any extra work. Look at this:
+
+```
+package main
+
+import "fmt"
+
+// Global variable
+var toolbox string = "Hammer, Screwdriver, Wrench"
+
+func work1() {
+    fmt.Println("Using tools from:", toolbox)
+}
+
+func work2() {
+    fmt.Println("Also using tools from:", toolbox)
+}
+
+func main() {
+    work1()  // Outputs: Using tools from: Hammer, Screwdriver, Wrench
+    work2()  // Outputs: Also using tools from: Hammer, Screwdriver, Wrench
+}
+```
+
+Both `work1` and `work2` use the global `toolbox` without any need to pass it around.
+
+### **Simplified Data Management:**
+
+Managing data can be like keeping your room tidy. Instead of scattering toys (data) everywhere, global variables keep them in one big toy box. All parts of your code know where to look. No need to keep passing [data from one function to another](https://www.sovascript.com/data-types-and-variables-in-go/). It's all there, ready and waiting.
+
+## **Drawbacks and Precautions**
+
+But wait! It's not all sunshine and rainbows. Like everything, global variables have their downsides.
+
+### **Risks of Overuse:**
+
+Too many global variables can be a problem. It's like having too many cooks in a kitchen. Confusing and messy! If every variable becomes global, it gets hard to track changes. And bugs? They become sneakier and harder to find.
+
+Imagine you had a global variable for temperature:
+
+```
+var temperature int = 25
+```
+
+If every function can change `temperature`, tracking which one caused a sudden drop or rise becomes a big headache.
+
+## **Tips for Safe Use of Global Variables in Golang:**
+
+1. **Limit the Number:** Only make a variable global if many functions really need it. Less is more.
+2. **Clear Names:** Name them clearly. Instead of `x`, maybe use `totalUsers`. It tells its purpose.
+3. **Document:** A little comment explaining its use can save future headaches.
+
+   ```
+   // totalUsers holds the number of users in the system
+   var totalUsers int = 1000
+   ```
+
+4. **Test:** Regularly test your code. Especially if many functions change a global variable. Keep an eye on unexpected behaviors.
+
+## **Comparing Local and Global in Golang**
+
+When coding in Golang, or any language, you often bump into two main types of variables: local and global. Think of them as indoor plants vs. garden plants. Both have their places and purposes. Let's dig deeper.
+
+**Example:**
+
+```
+// Global variable
+var globalVar = "I'm available throughout the package!"
+
+func displayGlobal() {
+    fmt.Println(globalVar)
+}
+
+func main() {
+    // Local variable
+    localVar := "I'm only available in this function!"
+    fmt.Println(localVar)
+    displayGlobal()
+}
+```
+
+In the above example, `globalVar` can be accessed by any function in the package, while `localVar` can only be used within the `main` function.
+
+### **Key Differences:**
+
+1. #### **Where They Live:**
+
+   - **Local Variables:** Live inside functions or blocks. They're like indoor plants that stay in one room.
+     ```
+     func sayHi() {
+         var name = "Alex"
+         fmt.Println("Hi", name)
+     }
+     ```
+   - **Global Variables:** Live outside all functions. They're like garden plants, out in the open.
+
+     ```
+     var gardenFlower = "Rose"
+
+     func showFlower() {
+         fmt.Println("The flower in the garden is:", gardenFlower)
+     }
+     ```
+
+2. #### **Life Span:**
+
+   - **Local Variables:** Live short lives. They're born when the function starts and say goodbye when the function ends.
+   - **Global Variables:** Live long lives. From the program's start to its end, they're there, always available.
+
+3. #### **Who Can See Them:**
+
+   - **Local Variables:** Only the function or block they're in can see and use them. Other functions? Nope, they're out of the loop.
+   - **Global Variables:** Every function can see and use them. It's an open party!
+
+### **When to Use Which**
+
+1. **Temporary Work:** Need a variable for a short job? Maybe to store a value or do a quick calculation? Go local.
+
+   ```
+   func add(a int, b int) {
+       var result = a + b
+       fmt.Println(result)
+   }
+   ```
+
+2. **Shared Data:** Got data many functions need? Or a setting that affects the whole program? Go global.
+
+   ```
+   var taxRate = 5.0
+
+   func calculateTax(amount float64) {
+       var tax = amount * taxRate / 100
+       fmt.Println("Tax:", tax)
+   }
+   ```
+
+But a heads up: Going global? Be sure! Too many global variables can make your code hard to read and debug.
+
+## **Conclusion**
+
+Local and global variables are like two sides of a coin. Both valuable. Both needed. Local ones keep things simple and tidy. Global ones make sharing easy. Like choosing between indoor and garden plants, think about what you need. And then, code smartly. Golang gives you the tools. It's up to you to use them well!

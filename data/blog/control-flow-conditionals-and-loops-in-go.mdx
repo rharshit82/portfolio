@@ -1,0 +1,175 @@
+---
+title: 'Control Flow: Conditionals and Loops in go'
+date: '2023-09-13'
+# coverImage: 'Conditionals-and-Loops-in-go.png'
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+Control flow in Go lets you manage how your code runs. Just like a traffic light controls cars on the road, control flow in Go guides your code. Let's see what it is and why it matters.
+
+## **What is Control Flow?**
+
+Control flow is how a program decides which code to run next. Think of it as a map. When you go on a trip, a map shows you the path to follow. In Go, control flow is this map. It tells the code where to go next.
+
+```
+x := 10
+if x > 5 {
+    fmt.Println("x is big!")
+}
+```
+
+In this small bit of Go code, control flow checks if x is bigger than 5. If yes, it prints "x is big!".
+
+## **Importance of Control Flow in Programming**
+
+Control flow helps your code work right. Without it, your code could get lost. It's like cooking. When making a cake, you follow steps in order. If you don't, the cake may not come out good. Control flow keeps your code's steps in order so it works like it should.
+
+## **Conditionals in Go**
+
+Conditionals are big in control flow. They let your program make choices. Let's see how they work in Go.
+
+### **The Simple if Statement**
+
+The `if` statement checks something. If it's true, the code inside runs.
+
+#### **Syntax of if**
+
+In Go, the `if` statement looks like this:
+
+```
+if someCondition {
+    // Run this code if true
+}
+```
+
+For example:
+
+```
+y := 7
+if y < 10 {
+    fmt.Println("y is small!")
+}
+```
+
+Here, the code checks if y is less than 10. If true, it prints "y is small!".
+
+#### **Real-life analogy for understanding if**
+
+Think of a door. If it's open, you can walk through. If not, you wait. In Go, the `if` statement is like checking the door. If the thing you check is true (door is open), you run the code.
+
+### **The if-else Combo**
+
+Sometimes, you want to do something if a check is true, and something else if it's not. That's where `if-else` comes in.
+
+Here's how you use `if-else` in Go:
+
+```
+if someCondition {
+    // Run this code if true
+} else {
+    // Run this code if false
+}
+```
+
+For instance:
+
+```
+z := 12
+if z == 10 {
+    fmt.Println("z is ten!")
+} else {
+    fmt.Println("z is not ten!")
+}
+```
+
+In this example, because z is 12 (not 10), the code prints "z is not ten!".
+
+#### **Everyday scenarios with if-else**
+
+Imagine you want ice cream. If the shop has your favorite flavor, you buy it. Else, you pick another flavor. That's how `if-else` works. It checks something and acts based on that check.
+
+#### **Multiple Conditions with else-if**
+
+What if there are many choices? Like picking a drink size: small, medium, or large. Here, `else-if` can help.
+
+#### **Chain of Decisions**
+
+In Go, you can chain decisions using `else-if` like this:
+
+```
+if firstCondition {
+    // First choice
+} else if secondCondition {
+    // Second choice
+} else {
+    // Last choice
+}
+```
+
+It's like picking a shirt based on the weather. If it's hot, you pick a light shirt. Else, if it's cold, you pick a warm one. Else, you just grab any shirt.
+
+### **Exploring Loops in Go**
+
+Loops are a key part of many programming languages, including Go. They let you repeat a set of actions until a certain condition is met. In Go, we mainly use the `for` loop. Let's dive into it.
+
+#### **The Power of for**
+
+In Go, the `for` loop is the star. It's flexible and can handle different kinds of looping needs.
+
+#### **Basic Looping with for**
+
+A basic `for` loop in Go works like this:
+
+```
+for i := 0; i < 10; i++ {
+    fmt.Println(i)
+}
+```
+
+This code prints numbers from 0 to 9. The loop runs until `i` is no longer less than 10.
+
+### **Using for as a "While" loop**
+
+Go doesn't have a traditional "while" loop, but don't worry! The `for` loop can act like one:
+
+```
+x := 5
+for x > 0 {
+    fmt.Println(x)
+    x--
+}
+```
+
+This code prints numbers from 5 to 1. It keeps running as long as `x` is greater than 0.
+
+## **A metaphor to remember loops**
+
+Imagine a clock. The second hand goes around and around until a minute has passed. Then it starts again. That's like a loop in Go. It does the same thing over and over until it's time to stop.
+
+### **Why Go Stands Out**
+
+Go is a young language, but it has quickly become popular. What makes it special?
+
+#### **Simplicity in Syntax**
+
+One of Go's best points is its clean and simple code. You can read it easily and understand what's happening. This makes writing and checking your code faster.
+
+```
+func add(x int, y int) int {
+    return x + y
+}
+```
+
+This code defines a function that adds two numbers. Simple and clear!
+
+### **Go’s Approach to Loops and Conditionals**
+
+While other languages have many ways to loop or make decisions, Go keeps it simple. It mainly uses the `for` loop and `if` statements. This means less time learning special rules and more time coding.
+
+## **Conclusion & Closing Thoughts**
+
+Go offers a fresh approach to programming. It's clean, easy to learn, and powerful. Loops, like the `for` loop, are a big part of this. They let you do a lot with a little code. As you continue with Go, enjoy its clear style and smart tools. They make coding a joy!

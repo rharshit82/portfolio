@@ -1,0 +1,320 @@
+---
+title: 'Concurrency vs Parallelism in Go: Explained'
+date: '2023-09-08'
+# coverImage: 'Concurrency-vs.-Parallelism-in-Go-Explained.png'
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+In the world of programming, there's often a mix-up between concurrency and parallelism, especially when you're working with languages like Go. But, fear not! Here, we'll break down these concepts, see how they differ, and look at Go's unique approach.
+
+## **What is Concurrency?**
+
+Concurrency means managing multiple tasks at the same time. Imagine you're a DJ, switching between songs. You play a bit of one song, pause it, switch to another, and so on. In programming, this would be like a system working on one task, then switching to another task before the first is finished. In Go, you can see this in action with "goroutines". A simple example:
+
+```
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+}
+
+func main() {
+	go say("hello")
+	say("world")
+}
+```
+
+Here, `say("hello")` and `say("world")` can run at the same time because of the `go` keyword, showing concurrency.
+
+## **What is Parallelism?**
+
+Now, let's look at parallelism. While concurrency is about managing tasks, parallelism is about doing many tasks at the same instant. Consider a choir. Each member sings a different note, but they all sing at the same time. In programming, it’s when tasks run on separate processors to speed up processing time. Go also supports this with its goroutines and CPU processors. A glance at parallel execution:
+
+```
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+var wg sync.WaitGroup
+
+func printNumbers() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
+	wg.Done()
+}
+
+func printLetters() {
+	for i := 'A'; i < 'A'+10; i++ {
+		fmt.Println(string(i))
+	}
+	wg.Done()
+}
+
+func main() {
+	wg.Add(2)
+	go printNumbers()
+	go printLetters()
+	wg.Wait()
+}
+```
+
+In this snippet, both `printNumbers` and `printLetters` run at the same time, and they finish their tasks in parallel, thanks to Go's efficient handling of CPU resources.
+
+## **Key Differences**
+
+Understanding concurrency and parallelism is vital in the Go universe. To help you get the big picture, let's break down their key differences in terms of mechanism, goal, and benefits.
+
+### **Mechanism**
+
+- #### **Concurrency**:
+
+  - **What it does**: Manages multiple tasks, splitting them into parts.
+  - **How Go does it**: Using goroutines. A goroutine is a lightweight thread managed by the Go runtime.
+  - **Code Sample**:
+
+    ```
+    package main
+
+    import (
+        "fmt"
+        "time"
+    )
+
+    func task(name string) {
+        for i := 0; i < 5; i++ {
+            time.Sleep(50 * time.Millisecond)
+            fmt.Println(name)
+        }
+    }
+
+    func main() {
+        go task("Task 1")
+        go task("Task 2")
+    }
+    ```
+
+    In this example, "Task 1" and "Task 2" run side by side but might not complete at the same time.
+
+- #### **Parallelism**:
+
+  - **What it does**: Executes multiple tasks at the exact same moment.
+  - **How Go does it**: Using goroutines and multiple CPU cores.
+  - **Code Sample**:
+
+    ```
+    package main
+
+    import (
+        "fmt"
+        "sync"
+    )
+
+    var wg sync.WaitGroup
+
+    func taskOne() {
+        for i := 1; i <= 5; i++ {
+            fmt.Println("Task One:", i)
+        }
+        wg.Done()
+    }
+
+    func taskTwo() {
+        for i := 'a'; i < 'a'+5; i++ {
+            fmt.Println("Task Two:", string(i))
+        }
+        wg.Done()
+    }
+
+    func main() {
+        wg.Add(2)
+        go taskOne()
+        go taskTwo()
+        wg.Wait()
+    }
+    ```
+
+    Here, "Task One" and "Task Two" start at the same time, showing parallel execution.
+
+### **Goal**
+
+- #### **Concurrency**:
+  - **Aim**: To deal with a lot at once. It's like having multiple browser tabs open. You can switch between them, but you view only one at a time.
+- #### **Parallelism**:
+  - **Aim**: To do a lot at once. Think of it as having multiple screens showing different movies. All play at once.
+
+### **Benefits**
+
+- #### **Concurrency**:
+  - **Pros**:
+    - Better structure: Easier to break tasks into chunks and manage them.
+    - Efficient: Tasks don’t wait around. As one pauses, another takes over.
+    - Resource-friendly: It doesn’t always need multiple CPU cores.
+- #### **Parallelism**:
+  - **Pros**:
+    - Speed: Many tasks finish faster because they run at the exact same time.
+    - Power: Uses the full power of multi-core CPUs.
+    - Big jobs: Great for tasks like data processing where a lot has to happen fast.
+
+## **How Go Handles Both**
+
+Go stands out in the programming world due to its simple and efficient handling of both concurrency and parallelism. At the heart of this capability are two powerful tools: goroutines and channels. Let's get into the details of how they work and why they're so cool!
+
+### **Go Routines**
+
+Goroutines are one of the stars in the Go universe. Think of them as mini-functions that can run at the same time as other functions.
+
+- **What are they?**: They're light-weight threads. Super light! That means you can have thousands of them running without a problem.
+- **How to use**: Just put `go` before a function call. Like magic, it now runs concurrently with other code.
+- **Code Sample**:
+
+  ```
+  package main
+
+  import (
+      "fmt"
+      "time"
+  )
+
+  func printNumbers() {
+      for i := 1; i <= 5; i++ {
+          time.Sleep(200 * time.Millisecond)
+          fmt.Println("Number:", i)
+      }
+  }
+
+  func printLetters() {
+      for i := 'a'; i <= 'e'; i++ {
+          time.Sleep(400 * time.Millisecond)
+          fmt.Println("Letter:", string(i))
+      }
+  }
+
+  func main() {
+      go printNumbers()
+      go printLetters()
+      time.Sleep(3 * time.Second)
+  }
+  ```
+
+  In the above code, `printNumbers` and `printLetters` run at the same time. No waiting around!
+
+### **Channels**
+
+Now, when you have all these goroutines running, you need a safe way for them to talk to each other. That's where channels come in.
+
+- **What are they?**: Think of channels as pipes. One goroutine puts a message in one end, and another goroutine takes it out from the other end.
+- **Why they matter?**: They provide a safe way for goroutines to share data. No more messy crashes or weird bugs!
+- **Code Sample**:
+
+  ```
+  package main
+
+  import (
+      "fmt"
+  )
+
+  func sendData(ch chan string) {
+      ch <- "Hello from sendData!"
+  }
+
+  func main() {
+      messageChannel := make(chan string)
+
+      go sendData(messageChannel)
+
+      message := <-messageChannel
+      fmt.Println(message)
+  }
+  ```
+
+  Here, `sendData` sends a message through the `messageChannel`. In the `main` function, we take the message out and print it.
+
+## **Real-World Examples**
+
+While the concepts of concurrency and parallelism are fascinating on their own, the real magic happens when you see them in action, solving everyday problems. Let’s look at two common scenarios: web server handling and data processing.
+
+### **Web Server Handling**
+
+In the online world, servers get lots of requests. Imagine a busy restaurant. Customers come in, make orders, wait, eat, and leave. If you had only one chef, things would slow down. But with more chefs (goroutines), things get done quicker!
+
+- **Using Goroutines**: When a user sends a request, instead of waiting for one to complete before starting the next, goroutines let you handle multiple requests at once.
+- **Code Sample**:
+
+  ```
+  package main
+
+  import (
+      "fmt"
+      "net/http"
+  )
+
+  func handler(w http.ResponseWriter, r *http.Request) {
+      fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+  }
+
+  func main() {
+      http.HandleFunc("/", handler)
+      http.ListenAndServe(":8080", nil)
+  }
+  ```
+
+  With the above code, every time a user accesses the server, the `handler` function can run concurrently for each user, thanks to Go's built-in web server capabilities.
+
+### **Data Processing**
+
+Big data is a big deal. Imagine you need to go through a huge list of numbers and find out how many are even.
+
+- **Using Goroutines and Channels**: Split the list into parts. Use goroutines to check each part, then use channels to gather the results.
+- **Code Sample**:
+
+  ```
+  package main
+
+  import (
+      "fmt"
+  )
+
+  func countEven(nums []int, ch chan int) {
+      count := 0
+      for _, num := range nums {
+          if num%2 == 0 {
+              count++
+          }
+      }
+      ch <- count
+  }
+
+  func main() {
+      numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+      ch := make(chan int)
+
+      go countEven(numbers[:len(numbers)/2], ch)
+      go countEven(numbers[len(numbers)/2:], ch)
+
+      count1, count2 := <-ch, <-ch
+
+      fmt.Println("Total even numbers:", count1+count2)
+  }
+  ```
+
+  Here, the list of numbers is divided into two parts. Each part is processed by a separate goroutine, and the results are combined to give the final count.
+
+## **Conclusion**
+
+The strength of Go lies not just in its ability to manage tasks, but in how it empowers developers to solve real-world problems efficiently. Whether you’re running a high-traffic web server or crunching big data, Go's goroutines and channels offer a powerful, yet simple way to get things done. With these tools in your arsenal, you're well-equipped to tackle the challenges of the modern computing world. Happy coding!

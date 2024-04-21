@@ -1,0 +1,252 @@
+---
+title: 'Concurrency Patterns in Golang: Fan-out, Fan-in, and More'
+date: '2023-09-16'
+# coverImage: "Concurrency-Patterns-in-Golang-Fan-out-Fan-in-and-More-.png"
+summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
+draft: false
+tags: ['golang']
+authors: ['harshit']
+layout: PostSimple
+---
+
+Concurrency in Golang lets programs do many things at once, like having many helpers in a kitchen. Golang has special patterns, or ways, to manage this. Two important ones are "Fan-out" and "Fan-in." "Fan-out" is when you start many tasks at once, like many cooks making different dishes. "Fan-in" is when many tasks finish and send their results to one place, like all the dishes being served on one table. Golang has tools and tricks to make these patterns easy and effective for programmers.
+
+## **What is concurrency?**
+
+Concurrency, in easy words, is like having a chef who can cook multiple dishes at once rather than one at a time. Instead of waiting for one dish to finish before starting the next, the chef works on several dishes, switching between them as needed. In computer terms, this means doing many jobs at the same time, but not necessarily at the exact same moment.
+
+For a more technical touch: In Golang, you might come across something called `goroutines`. A `goroutine` is a light-weight thread managed by the Go runtime. Starting one is easy:
+
+```
+go func() {
+  fmt.Println("Hello from a goroutine!")
+}()
+fmt.Println("Hello from main!")
+```
+
+When you run this code, both messages print, showing that two tasks ran at the same time. That's a simple taste of concurrency!
+
+### **Importance of concurrency in modern computing**
+
+Computers now are powerful. They have multiple cores or CPUs. Concurrency lets us use these cores at the same time, making tasks run faster. It's like having many chefs in a big kitchen, each cooking a different dish. More chefs, more dishes cooked at the same time!
+
+In today's fast world, users don't like to wait. Whether it's a web page loading or an app performing tasks, speed is key. Using concurrency, apps and websites can do many things at once, giving users what they want quickly.
+
+In Golang, the built-in support for concurrency makes it a top pick for many developers. The language's design lets developers write concurrent code in a simpler way. Remember the `goroutine` from earlier? Imagine using hundreds or thousands of them. With Go, it's not just possible but easy!
+
+## **Diving Into Golang**
+
+### **Brief overview of Golang**
+
+Golang, often just called Go, is a computer language made by Google. Think of computer languages as tools in a toolbox. Just like a hammer or a screwdriver, each tool has a job it's good at. Golang's job? Making quick and strong software.
+
+Here's a quick look at how Go code feels:
+
+```
+package main
+import "fmt"
+func main() {
+  fmt.Println("Hello, World!")
+}
+```
+
+When you run this code, it shows the message "Hello, World!" on the screen. Simple, right? That's a big part of Go's charm: it's easy to read and write.
+
+### **Why Golang stands out for concurrency**
+
+Now, you might think, "There are many computer languages. Why pick Golang for jobs that need concurrency?" Good question!
+
+1. **Goroutines:** These are like mini-tasks in Go. Starting a goroutine is as easy as adding `go` before a function. Here's how you do it:
+
+```
+go doSomething()
+```
+
+This tells Go to start the `doSomething` function and move on without waiting for it to finish. If you had many tasks, you could start many goroutines without a sweat!
+
+2. **Channels:** Imagine two people, Alice and Bob, who want to send letters to each other. They'd need a mailbox, right? In Golang, these mailboxes are called channels. They let goroutines talk to each other. Here's a basic channel example:
+
+```
+messages := make(chan string)
+go func() {
+  messages <- "Hi from goroutine!"
+}()
+msg := <-messages
+fmt.Println(msg)
+```
+
+
+
+This code makes a new channel called `messages`. The goroutine sends a message, and the main function gets it and shows it.
+
+3. **Simple Syntax:** Some languages make concurrency hard. But Go? Go keeps it simple. With clear rules and easy-to-use tools, developers spend less time fighting the language and more time getting the job done.
+4. **Standard Library:** Go has a great set of built-in tools. These tools help with many tasks, from working with the web to dealing with dates and times. And yes, there are tools for concurrency too!
+
+## **Fan-out**
+
+### **Definition and use cases**
+
+**Fan-out** is when you start a lot of tasks at once to do jobs faster. Imagine you have 100 letters to send. Instead of one person sending all 100 letters, you get 10 friends to help. Each person sends 10 letters. The job finishes much faster, right? That's the idea behind Fan-out.
+
+**Use cases**:
+
+1. **Data processing**: Say you have a lot of data to check or change. Fan-out lets many tasks work on different parts of the data at the same time.
+2. **Web requests**: If you need to ask many websites for information, Fan-out can do these asks at the same time.
+3. **Work queues**: When there's a lot of work to do, you can share it among many workers. Each worker does a piece of the job.
+
+### **Implementation in Golang**
+
+In Go, Fan-out is easy with goroutines. Let's see an example using the letter-sending idea:
+
+```
+func sendLetter(letterID int, channel chan string) {
+  // Let's pretend it takes time to send a letter
+  time.Sleep(time.Second)
+  channel <- fmt.Sprintf("Letter %d sent!", letterID)
+}
+func main() {
+  letterChannel := make(chan string)
+  for i := 1; i <= 100; i++ {
+    go sendLetter(i, letterChannel)
+  }
+  for i := 1; i <= 100; i++ {
+    fmt.Println(<-letterChannel)
+  }
+}
+```
+
+This code starts 100 tasks to send letters. Each task tells the main function when it's done.
+
+## **Fan-in**
+
+### **Definition and use cases**
+
+**Fan-in** is the opposite of Fan-out. It's about taking results from many tasks and putting them together. Think of many streams joining to make one big river.
+
+**Use cases**:
+
+1. **Gathering results**: If you ask many websites for information, Fan-in can collect all the answers.
+2. **Combining data**: After processing data in pieces, Fan-in can put the pieces back together.
+3. **Job results**: When many workers finish their jobs, Fan-in can gather the results.
+
+### **Implementation in Golang**
+
+Channels in Go make Fan-in a breeze. Let's see an example:
+
+```
+func worker(taskID int, channel chan int) {
+  // This worker just sends its task ID after some time
+  time.Sleep(time.Second)
+  channel <- taskID
+}
+func main() {
+  tasksChannel := make(chan int)
+  results := make([]int, 0)
+  for i := 1; i <= 10; i++ {
+    go worker(i, tasksChannel)
+  }
+  for i := 1; i <= 10; i++ {
+    result := <-tasksChannel
+    results = append(results, result)
+  }
+  fmt.Println("Finished tasks:", results)
+}
+```
+
+Here, 10 workers do jobs and send results. The main function collects all the results.
+
+## **Additional Concurrency Patterns**
+
+There's more to Go than just Fan-out and Fan-in. Here are some other patterns:
+
+1. **Worker Pools**: Imagine you have only 10 workers but 1000 jobs. A worker pool lets workers pick up new jobs once they finish old ones. It's like a relay race!
+2. **Rate Limiting**: Sometimes, you can't go too fast. Rate limiting sets a speed limit on tasks. It's like telling cars how fast they can go on a road.
+3. **Mutexes and Locks**: When many tasks change data, things can go wrong. Mutexes make sure only one task changes data at a time.
+
+## **Best Practices for Implementing Concurrency**
+
+### **1\. Always Start Simple**
+
+When starting with concurrency, keep it easy. First, make sure your code works without concurrency. Once that's set, add concurrency bit by bit.
+
+**Example**:
+
+```
+// Without concurrency
+processData(data1)
+processData(data2)
+```
+
+```
+// With concurrency
+go processData(data1)
+go processData(data2)
+```
+
+**2\. Use Channels Wisely**
+
+Channels are great for talking between tasks. But, be careful! Always close channels when done and handle data with care.
+
+**Example**:
+
+```
+dataChannel := make(chan int)
+
+go func() {
+  dataChannel <- processData()
+  close(dataChannel)
+}()
+result := <-dataChannel
+fmt.Println(result)
+```
+
+### **3\. Avoid Global State**
+
+Global state can lead to problems. Multiple tasks might try to change it at once. Instead, pass data to tasks and get results from them.
+
+### **4\. Limit Number of Goroutines**
+
+Starting too many goroutines can slow things down. Use worker pools to manage them.
+
+**Example**:
+
+```
+type Job struct {
+  ID int Data string
+}
+func worker(jobChan chan Job, results chan int) {
+  for job := range jobChan {
+    results <- processJob(job)
+  }
+}
+jobChannel := make(chan Job, 100)
+resultsChannel := make(chan int, 100)
+for w := 1; w <= 3; w++ {
+  go worker(jobChannel, resultsChannel)
+}
+for j := 1; j <= 9; j++ {
+  jobChannel <- Job {
+    ID: j, Data: "SomeData"
+  }
+}
+close(jobChannel)
+for a := 1; a <= 9; a++ {
+  fmt.Println(<-resultsChannel)
+}
+```
+
+### **5\. Test, Test, Test**
+
+Concurrency can bring bugs. Always test your code. Go has a great toolkit for testing concurrency. Use it!
+
+## **Conclusion: Golang's Power in Concurrency**
+
+To wrap things up, Golang is a powerhouse for concurrency. It gives developers the right tools in a neat package. From channels to goroutines, everything is made easy.
+
+Why do developers like Go for concurrency?
+
+1. **Simplicity**: As seen in our examples, adding concurrency is often just a matter of adding `go` before a function.
+2. **Flexibility**: Whether it's Fan-out, Fan-in, or any other pattern, Go's got your back.
+3. **Safety**: With channels and built-in testing tools, Go helps you write safe concurrent code.
+
+All in all, if you're looking to tap into the world of concurrent programming, Golang is a top pick. It's simple, strong, and efficient – just what modern software needs!
