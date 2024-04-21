@@ -1,13 +1,13 @@
 ---
 title: 'File IO Optimization in Golang'
 date: '2024-02-05'
-# coverImage: 'learn-golang.png'
-summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
 draft: false
 tags: ['golang']
 authors: ['harshit']
 layout: PostSimple
 ---
+
+![File IO Optimization in Golang](/static/images/blog/learn-golang.png)
 
 File I/O (Input/Output) is a fundamental concept in programming that allows you to read from and write to files. Optimizing file I/O can greatly enhance the performance of your applications, especially when dealing with large files or high-frequency operations. Golang, with its efficient concurrency model and straightforward syntax, offers several ways to optimize file I/O operations. Here's a closer look at how you can make file I/O operations faster and more efficient in Golang.
 
@@ -15,7 +15,7 @@ File I/O (Input/Output) is a fundamental concept in programming that allows you 
 
 ### 1\. Use Buffered I/O
 
-Buffered I/O is a technique that uses a buffer to minimize direct read and write operations to the disk. Golang's `bufio` package provides this functionality, allowing you to wrap your file objects in a buffered reader or writer. This can significantly speed up I/O operations by reducing the number of system calls. The main [function](https://www.sovascript.com/functions-in-golang/) below is an example of its use.
+Buffered I/O is a technique that uses a buffer to minimize direct read and write operations to the disk. Golang's `bufio` package provides this functionality, allowing you to wrap your file objects in a buffered reader or writer. This can significantly speed up I/O operations by reducing the number of system calls. The main [function](https://harshit.me/functions-in-golang/) below is an example of its use.
 
 **Example:**
 
@@ -126,7 +126,7 @@ func main() {
 
 ### 4\. Concurrent I/O Operations
 
-Golang's [concurrency](https://www.sovascript.com/concurrency-patterns-in-golang-fan-out-fan-in-and-more/) model makes it simple to perform I/O operations in parallel. By using goroutines and channels, you can process parts of a file concurrently, which is especially beneficial for CPU-bound I/O tasks.
+Golang's [concurrency](https://harshit.me/concurrency-patterns-in-golang-fan-out-fan-in-and-more/) model makes it simple to perform I/O operations in parallel. By using goroutines and channels, you can process parts of a file concurrently, which is especially beneficial for CPU-bound I/O tasks.
 
 **Example:**
 

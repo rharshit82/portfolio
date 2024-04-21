@@ -1,13 +1,14 @@
 ---
 title: 'Templating and Frontend Integration in Go'
 date: '2023-10-10'
-# coverImage: "Templating-and-Frontend-Integration-in-Go.png"
 summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
 draft: false
 tags: ['golang']
 authors: ['harshit']
 layout: PostSimple
 ---
+
+![Templating and Frontend Integration in Go](/static/images/blog/Templating-and-Frontend-Integration-in-Go.pngg)
 
 You have a golang backend to handle all the backend tasks but you need something to show your it too. You can either use libraries like React, Angular to create a separate frontend and use the golang backend for your business logic. However, if you want a simple application with HTML in frontend and golang in backend, templating is the way to go.
 
@@ -97,7 +98,7 @@ In this code, `{{.}}` is the action that tells Go to print "World" when it creat
 
 #### **Variables**
 
-Variables in Go templates help you hold and manage data. You can define a [variable](https://www.sovascript.com/golang-global-variables/) with the `with` action and use it later.
+Variables in Go templates help you hold and manage data. You can define a [variable](https://harshit.me/golang-global-variables/) with the `with` action and use it later.
 
 ```
 package main
@@ -183,7 +184,7 @@ In this code, `tmpl.Execute(os.Stdout, "World")` tells Go to use "World" as the 
 
 #### **Handling Static Files**
 
-In web development, static files are files that don't change, like images, CSS, and JavaScript files. Go has a built-in way to handle static files using the `http` package. You can use the `http.FileServer` function to [create a simple server](https://www.sovascript.com/building-basic-http-servers-in-go/) for your static files. Here’s how you might do it:
+In web development, static files are files that don't change, like images, CSS, and JavaScript files. Go has a built-in way to handle static files using the `http` package. You can use the `http.FileServer` function to [create a simple server](https://harshit.me/building-basic-http-servers-in-go/) for your static files. Here’s how you might do it:
 
 ```
 package main

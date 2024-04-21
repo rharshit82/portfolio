@@ -1,13 +1,13 @@
 ---
 title: 'Concurrency Patterns in Golang: Fan-out, Fan-in, and More'
 date: '2023-09-16'
-# coverImage: "Concurrency-Patterns-in-Golang-Fan-out-Fan-in-and-More-.png"
-summary: "Let's look at how we can perform the dimensionality reduction using the Auto-Encoders using Tensorflow"
 draft: false
 tags: ['golang']
 authors: ['harshit']
 layout: PostSimple
 ---
+
+![Concurrency Patterns in Golang: Fan-out, Fan-in, and More](/static/images/blog/Concurrency-Patterns-in-Golang-Fan-out-Fan-in-and-More-.png)
 
 Concurrency in Golang lets programs do many things at once, like having many helpers in a kitchen. Golang has special patterns, or ways, to manage this. Two important ones are "Fan-out" and "Fan-in." "Fan-out" is when you start many tasks at once, like many cooks making different dishes. "Fan-in" is when many tasks finish and send their results to one place, like all the dishes being served on one table. Golang has tools and tricks to make these patterns easy and effective for programmers.
 
@@ -74,8 +74,6 @@ go func() {
 msg := <-messages
 fmt.Println(msg)
 ```
-
-
 
 This code makes a new channel called `messages`. The goroutine sends a message, and the main function gets it and shows it.
 
