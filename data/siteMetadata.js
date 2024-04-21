@@ -9,7 +9,7 @@ const siteMetadata = {
   siteUrl: 'https://harshit.me',
   siteRepo: 'https://github.com/rharshit82',
   siteLogo: '/static/images/logo.png',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/images/twitter-card.jpg',
   email: 'harshitraj123200@gmail.com',
   github: 'https://github.com/rharshit82',
   twitter: 'https://twitter.com/0xHarshit',
